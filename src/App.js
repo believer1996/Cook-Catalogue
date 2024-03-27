@@ -1,25 +1,31 @@
-import logo from './logo.svg';
+import React, {  useEffect, useState } from 'react';
 import './App.css';
+export function App() {
 
-function App() {
+  const[result,setResult]=useState([]);
+
+  async function fetchData(){
+    const data= await fetch('https://content.newtonschool.co/v1/pr/64996337e889f331d43f70ba/recipes');
+    const response=await data.json();
+    return response;
+  }
+
+  useEffect(()=>{
+    fetchData().then((result)=>{
+      setResult(result);
+    });
+  },[])
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="app">
+     
+    {result && result.map((item)=>{
+    return   <div className="image-container" key={item.id}> 
+        <p>{item.title}</p> 
+        <img src={item.image} />
+        </div>
+      })}
     </div>
-  );
-}
 
-export default App;
+  );
+  }
